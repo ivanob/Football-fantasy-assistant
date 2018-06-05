@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const database = require('./database');
 
 //Solo betis, de momento
-const links_teams = ['http://www.laligafantasymarca.com/equipos/betis'];
+const links_teams = [];
 const base_url = 'http://www.laligafantasymarca.com';
 
 /*const options = {
@@ -13,9 +13,29 @@ const base_url = 'http://www.laligafantasymarca.com';
   }
 };*/
 
-database.connectDB();
+const options_teams = {
+  uri: base_url,
+  transform: function (body) {
+    return cheerio.load(body);
+  }
+};
 
-/*rp(options)
+//database.connectDB();
+
+
+rp(options_teams)
+  .then(($) => {
+    console.log("Started team info scraping");
+    var team_links = $(".teams-menu").find('a');
+    team_links.each(function(i, link){ 
+      links_teams.push({name: link.attribs.title, link: link.attribs.href});
+    });
+    database.store_teams(links_teams);
+  }
+);
+
+/*
+rp(options)
     .then(($) => {
         var players_description = $("#players-list").find("table").find(".name").find("a");
        // players_description = players_description.filter(x => x.attribs != undefined);
