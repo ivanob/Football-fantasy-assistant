@@ -1,18 +1,21 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
+const database = require('./database');
 
 //Solo betis, de momento
 const links_teams = ['http://www.laligafantasymarca.com/equipos/betis'];
 const base_url = 'http://www.laligafantasymarca.com';
 
-const options = {
+/*const options = {
   uri: links_teams[0],
   transform: function (body) {
     return cheerio.load(body);
   }
-};
+};*/
 
-rp(options)
+database.connectDB();
+
+/*rp(options)
     .then(($) => {
         var players_description = $("#players-list").find("table").find(".name").find("a");
        // players_description = players_description.filter(x => x.attribs != undefined);
@@ -48,4 +51,4 @@ rp(options)
     })
     .catch((err) => {
         console.log(err);
-});
+});*/
