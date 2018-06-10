@@ -22,7 +22,7 @@ const options_teams = {
 
 //database.connectDB();
 
-
+//Read the list of teams for this season
 rp(options_teams)
   .then(($) => {
     console.log("Started team info scraping");
@@ -32,6 +32,10 @@ rp(options_teams)
     });
     database.store_teams(links_teams);
   }
+);
+
+links_teams.map((team) =>
+  
 );
 
 /*
