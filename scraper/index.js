@@ -2,8 +2,8 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 const database = require('./database');
 
-//Solo betis, de momento
-const links_teams = [];
+const links_teams = []; //name: name of the team, link: link of the team
+const links_players = []; //
 const base_url = 'http://www.laligafantasymarca.com';
 
 /*const options = {
@@ -20,7 +20,7 @@ const options_teams = {
   }
 };
 
-function return_team_options(url){
+function return_url_options(url){
   return {
     uri: url,
     transform: function (body) {
@@ -40,27 +40,36 @@ rp(options_teams)
       links_teams.push({name: link.attribs.title, link: link.attribs.href});
     });
     database.store_teams(links_teams);
-    scraping_team();
+    scraping_player_links();
   }
 );
 
-function scraping_team(){
+function scraping_player_links(){
   links_teams.map((team, i) =>
-    rp(return_team_options(base_url + links_teams[i].link))
+    rp(return_url_options(base_url + links_teams[i].link))
     .then(($) => {
       console.log("Scraping team " + links_teams[i].name);
       var players_link = [];
       $(".tablepager tr h3 a").each(function(link){ 
         var link_player = $(this).attr("href");
         if(!players_link.includes(link_player)){
-            players_link.push(link_player);
+            players_link.push(link_player)
         }
-    })
-    console.log(players_link + "\n")
-  }
-)
+      })
+      links_players.push({name_team: links_teams[i].name, links_players: players_link})
+      scraping_player_stats()
+    }
+  )
 )}
 
+function scraping_player_stats(){
+  links_players.map((team, i) =>
+    rp(return_url_options(base_url + links_teams[i].link))
+    .then(($) => {
+      $
+    }
+  ))
+}
 
 /*
 rp(options)
