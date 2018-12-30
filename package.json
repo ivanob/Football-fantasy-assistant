@@ -2,10 +2,11 @@
   "name": "scraper",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc index.ts && node index.js"
+    "scrap": "npm run --prefix ./scraper/index.ts",
+    "client": "npm run --prefix ./client/index.js"
   },
   "author": "",
   "license": "ISC",
