@@ -1,4 +1,4 @@
-import { Team } from './types/Types'
+import { Team, Player } from './types/Types'
 const rp = require('request-promise')
 const cheerio = require('cheerio')
 const database = require('./database')
@@ -38,7 +38,7 @@ rp(options_teams)
     console.log("Started team info scraping");
     var team_links = $(".teams-menu").find('a');
     team_links.each(function(i, link){ 
-      const t :Team = {name: link.attribs.title, link: link.attribs.href}
+      const t :Team = {name: link.attribs.title, link: link.attribs.href, players: []}
       links_teams.push(t);
     });
     //database.store_teams(links_teams);
@@ -56,23 +56,46 @@ function scraping_player_links(){
         var link_player: string = $(this).attr("href");
         if(!players_link.filter(x => x===link_player).length){
             players_link.push(link_player)
+            const player: Player = scraping_player_stats(link_player)
+            team.players.concat([player])
         }
       })
-      team.players = players_link.map(x => {return {name: "A", link:x}})
+      // team.players = players_link.map(x => {return {name: "A", link:x}})
       // links_players.push({name_team: links_teams[i].name, links_players: players_link})
-      scraping_player_stats()
+      // scraping_player_stats()
     }
   )
 )}
 
-function scraping_player_stats(){
+function scraping_player_stats(link_player: string): Player{
+  rp(return_url_options(base_url + link_player))
+    .then(($) => {
+      const name_player = $('.name').text()
+      let position = ""
+      let value = ""
+      //const position = $('.info .left .title').next().text()
+      $('.info .left .title').each(function(index, element){ 
+        if($(element).text()==="Demarcación"){
+          position = ($(element).next().text())
+        }
+        if($(element).text()==="Valor"){
+          value = ($(element).next().text())
+        }
+      })
+      return {name: name_player,
+        position: position,
+        value: value}
+    })
+    return undefined
+}
+/*function scraping_player_stats(){
   links_players.map((team, i) =>
     rp(return_url_options(base_url + links_teams[i].link))
     .then(($) => {
       $
     }
   ))
-}
+}*/
 
 /*
 rp(options)
