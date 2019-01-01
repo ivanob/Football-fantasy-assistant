@@ -7,6 +7,6 @@ export type Team = {
 export type Player = {
     name: string,
     position: string,
-    value: string
+    value: number
     link?: string
 }
