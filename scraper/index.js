@@ -2,7 +2,8 @@
 exports.__esModule = true;
 var rp = require('request-promise');
 var cheerio = require('cheerio');
-var database = require('./database');
+var database_1 = require("./data/database");
+// const database = require('./data/database')
 var links_teams = [];
 var base_url = 'http://www.laligafantasymarca.com';
 /*const options = {
@@ -25,9 +26,9 @@ function return_url_options(url) {
         }
     };
 }
-//database.connectDB();
-scrap_teams();
-setTimeout(storeInDDBB, 20000);
+database_1.openConnection('a', 'b');
+//scrap_teams()
+//setTimeout(storeInDDBB, 20000);
 //Read the list of teams for this season
 function scrap_teams() {
     rp(options_teams)
@@ -79,7 +80,6 @@ function scraping_player_stats(link_player, team) {
             }
             if ($(element).text() === "Valor") {
                 value = ($(element).next().text()).slice(0, -2);
-                console.log(value);
             }
         });
         var p = { name: name_player,

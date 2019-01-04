@@ -1,7 +1,8 @@
 import { Team, Player } from './types/Types'
 const rp = require('request-promise')
 const cheerio = require('cheerio')
-const database = require('./database')
+import { openConnection, insertElement } from './data/database'
+// const database = require('./data/database')
 
 const links_teams: Team[] = [];
 const base_url = 'http://www.laligafantasymarca.com';
@@ -29,9 +30,9 @@ function return_url_options(url){
   };
 }
 
-//database.connectDB();
-scrap_teams()
-setTimeout(storeInDDBB, 20000);
+openConnection('a','b')
+//scrap_teams()
+//setTimeout(storeInDDBB, 20000);
 
 //Read the list of teams for this season
 function scrap_teams(){
