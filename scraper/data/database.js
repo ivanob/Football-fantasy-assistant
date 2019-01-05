@@ -9,12 +9,12 @@ const dbName = 'fantasy'
 
 
 // Use connect method to connect to the server
-const openConnection = (teams, players) => {
+const openConnection = (teams) => {
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err)
     console.log("Connected successfully to server")
     const db = client.db(dbName)
-    insertElement(db, client, 'a','a')
+    insertElement(db, client, 'teams', teams)
 })
 }
 
@@ -23,15 +23,12 @@ const closeConnection = (client) => {
 }
 
 const insertElement = (db, client, colName, obj) => {
-  var collection = db.collection('test');
+  var collection = db.collection(colName);
   // Insert some documents
-  collection.insertMany([
-    {a : 1}, {a : 2}, {a : 3}
-  ], function(err, result) {
+  console.log(obj)
+  collection.insertMany(obj, function(err, result) {
     assert.equal(err, null);
-    assert.equal(3, result.result.n);
-    assert.equal(3, result.ops.length);
-    console.log("Inserted 3 documents into the collection");
+    console.log("Inserted Teams into the collection");
     closeConnection(client)
   });
 }
