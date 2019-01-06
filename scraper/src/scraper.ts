@@ -33,7 +33,9 @@ const options_teams = {
         });
         scraping_players_links(links_teams);
       }
-    )
+    ).catch((error) => {
+      console.log("Error scraping team")
+    })
   }
 
   function scraping_players_links(links_teams){
@@ -49,11 +51,10 @@ const options_teams = {
               scraping_player_stats(link_player, team)
           }
         })
-        // team.players = players_link.map(x => {return {name: "A", link:x}})
-        // links_players.push({name_team: links_teams[i].name, links_players: players_link})
-        // scraping_player_stats()
       }
-    )
+    ).catch((error) => {
+      console.log("Error scraping player from team " + team)
+    })
   )}
 
   function scraping_player_stats(link_player: string, team: Team){
@@ -75,5 +76,8 @@ const options_teams = {
           value: value}
           if(!team.players) team.players = []
         team.players = team.players.concat(p)
+      })
+      .catch((error) => {
+        console.log("Error scraping player stats of " + link_player)
       })
   }
