@@ -73,6 +73,7 @@ const options_teams = {
         const p: Player =  {name: name_player,
           position: position,
           value: value}
+          if(!team.players) team.players = []
         team.players = team.players.concat(p)
       })
   }

@@ -9,8 +9,6 @@ setTimeout(storeInDDBB, 20000);
 
 function storeInDDBB(){
   links_teams.map((t: Team) => 
-    console.log(t.name + " " + t.players.length))
+    console.log(t.name + " " + ((t.players)?t.players.length:0) ))
   openConnection(links_teams)
 }
-
-

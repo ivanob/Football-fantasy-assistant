@@ -9,7 +9,7 @@ const dbName = 'fantasy'
 
 
 // Use connect method to connect to the server
-const openConnection = (teams) => {
+export const openConnection = (teams) => {
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err)
     console.log("Connected successfully to server")
@@ -18,7 +18,7 @@ const openConnection = (teams) => {
 })
 }
 
-const closeConnection = (client) => {
+export const closeConnection = (client) => {
   client.close()
 }
 
@@ -32,6 +32,3 @@ const insertElement = (db, client, colName, obj) => {
     closeConnection(client)
   });
 }
-
-module.exports = {openConnection: openConnection,
-   closeConnection: closeConnection}
