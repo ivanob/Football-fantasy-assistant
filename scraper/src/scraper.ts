@@ -1,7 +1,8 @@
 import { Team, Player } from './types/Types'
 
 const cheerio = require('cheerio')
-const rp = require('request-promise')
+// const rp = require('request-promise')
+var rp = require('promise-request-retry');
 
 const base_url = 'http://www.laligafantasymarca.com';
 
@@ -15,6 +16,7 @@ const options_teams = {
   function return_url_options(url){
     return {
       uri: url,
+      retry: 10, // will retry the call twice, in case of error.
       transform: function (body) {
         return cheerio.load(body);
       }
