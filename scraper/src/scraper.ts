@@ -1,4 +1,4 @@
-import { Team, Player } from './types/Types'
+import { Team, Player } from './types/TypesFantasy'
 
 const cheerio = require('cheerio')
 // const rp = require('request-promise')
@@ -16,7 +16,7 @@ const options_teams = {
   function return_url_options(url){
     return {
       uri: url,
-      retry: 10, // will retry the call twice, in case of error.
+      retry: 6, // will retry the call twice, in case of error.
       transform: function (body) {
         return cheerio.load(body);
       }
@@ -24,19 +24,24 @@ const options_teams = {
   }
 
 //Read the list of teams for this season
- export default function scrap_teams(links_teams){
+ export default async function scrap_teams(){
+   const links_teams: Team[] = []
+  return new Promise(resolve => {
     rp(options_teams)
       .then(($) => {
         console.log("Started team info scraping");
         var team_links = $(".teams-menu").find('a');
         team_links.each(function(i, link){ 
           const t :Team = {name: link.attribs.title, link: link.attribs.href, players: []}
+          console.log(t)
           links_teams.push(t);
         });
-        scraping_players_links(links_teams);
+        return resolve(links_teams)
+        // scraping_players_links(links_teams);
       }
     ).catch((error) => {
       console.log("Error scraping team")
+    })
     })
   }
 
@@ -75,7 +80,8 @@ const options_teams = {
         })
         const p: Player =  {name: name_player,
           position: position,
-          value: value}
+          value: value,
+          link: base_url + link_player}
           if(!team.players) team.players = []
         team.players = team.players.concat(p)
       })

@@ -1,14 +1,20 @@
-
-import { openConnection } from './data/database'
-import { Team, Player } from './types/Types'
+import { Team, Player } from './types/TypesFantasy'
 import scrap_teams from './scraper'
+import { MongoController } from './data/MongoController'
 
-let links_teams: Team[] = [];
-scrap_teams(links_teams)
-setTimeout(storeInDDBB, 40000);
-
-function storeInDDBB(){
-  links_teams.map((t: Team) => 
-    console.log(t.name + " " + ((t.players)?t.players.length:0) ))
-  //openConnection(links_teams)
+async function scrapData() {
+  const teams = await scrap_teams()
 }
+
+const dbController = new MongoController()
+dbController.storeTeam
+scrapData()
+//setTimeout(storeInDDBB, 10000);
+
+// openConnection(links_teams)
+
+// function storeInDDBB(){
+//   links_teams.map((t: Team) => 
+//     console.log(t.name + " " + ((t.players)?t.players.length:0) ))
+//   openConnection(links_teams)
+// }

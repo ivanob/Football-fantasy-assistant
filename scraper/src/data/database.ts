@@ -1,34 +1,37 @@
 const MongoClient = require('mongodb').MongoClient;
+import { Team, Player } from '../types/TypesFantasy'
 const assert = require('assert');
 
-// Connection URL
-const url = 'mongodb://localhost:27018';
-
-// Database Name
-const dbName = 'fantasy'
 
 
-// Use connect method to connect to the server
-export const openConnection = (teams) => {
-  MongoClient.connect(url, function(err, client) {
-    assert.equal(null, err)
-    console.log("Connected successfully to server")
-    const db = client.db(dbName)
-    insertElement(db, client, 'teams', teams)
-})
-}
+// // Use connect method to connect to the server
+// export const openConnection = (teams: Team[]) => {
+//   MongoClient.connect(url, function(err, client) {
+//     assert.equal(null, err)
+//     console.log("Connected successfully to server")
+//     const db = client.db(dbName)
+//     insertElement(db, client, 'teams', teams)
+// })
+// }
 
-export const closeConnection = (client) => {
-  client.close()
-}
+// export const closeConnection = (client) => {
+//   client.close()
+// }
 
-const insertElement = (db, client, colName, obj) => {
-  var collection = db.collection(colName);
-  // Insert some documents
-  console.log(obj)
-  collection.insertMany(obj, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted Teams into the collection");
-    closeConnection(client)
-  });
-}
+// const insertElement = (db, client, colName, teams: Team[]) => {
+//   var collection = db.collection(colName);
+//   teams.map((team: Team) => db.collection(colName).update({ name: team.name }, team, {upsert: true, multi: true},function(err, res) {}))
+//   // Insert some documents
+//   /*collection.insertMany(obj, function(err, result) {
+//     assert.equal(err, null);
+//     console.log("Inserted Teams into the collection");
+//     closeConnection(client)
+//   });*/
+// }
+
+// export const readDDBB = (db) => {
+//   db.collection("teams").find().toArray(function(err, result) {
+//     if (err) throw err;
+//     console.log(result);
+//   });
+// }
