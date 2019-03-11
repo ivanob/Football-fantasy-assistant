@@ -24,7 +24,7 @@ const options_teams = {
   }
 
 //Read the list of teams for this season
- export default async function scrap_teams(){
+ export default async function scrap_teams(): Promise<Team[]>{
    const links_teams: Team[] = []
   return new Promise(resolve => {
     rp(options_teams)
@@ -37,7 +37,6 @@ const options_teams = {
           links_teams.push(t);
         });
         return resolve(links_teams)
-        // scraping_players_links(links_teams);
       }
     ).catch((error) => {
       console.log("Error scraping team")
@@ -45,23 +44,24 @@ const options_teams = {
     })
   }
 
-  function scraping_players_links(links_teams){
-    links_teams.map((team, i) =>
-      rp(return_url_options(base_url + links_teams[i].link))
-      .then(($) => {
-        console.log("Scraping players from team " + links_teams[i].name);
-        var players_link: string[] = [];
-        $(".tablepager tr h3 a").each(function(link){ 
-          var link_player: string = $(this).attr("href");
-          if(players_link.filter(x => x===link_player).length === 0){
-              players_link.push(link_player)
-              scraping_player_stats(link_player, team)
-          }
-        })
+  function scraping_players_links(team: Team){
+    return new Promise(resolve => {
+        rp(return_url_options(base_url + team.link))
+        .then(($) => {
+          console.log("Scraping players links from team " + team.name);
+          var players_link: string[] = [];
+          $(".tablepager tr h3 a").each(function(link){ 
+            var link_player: string = $(this).attr("href");
+            if(players_link.filter(x => x===link_player).length === 0){
+                players_link.push(link_player)
+            }
+          })
+          resolve(players_link)
+        }
+      ).catch((error) => {
+        console.log("Error scraping player from team " + team)
+      })
       }
-    ).catch((error) => {
-      console.log("Error scraping player from team " + team)
-    })
   )}
 
   function scraping_player_stats(link_player: string, team: Team){

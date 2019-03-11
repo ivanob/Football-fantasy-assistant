@@ -2,19 +2,26 @@ import { Team, Player } from './types/TypesFantasy'
 import scrap_teams from './scraper'
 import { MongoController } from './data/MongoController'
 
-async function scrapData() {
-  const teams = await scrap_teams()
+async function scrapData(dbController: MongoController) {
+  const teams: Team[] = await scrap_teams()
+  dbController.storeTeams(teams)
+  dbController.closeConnection()
 }
 
-const dbController = new MongoController()
-dbController.storeTeam
-scrapData()
-//setTimeout(storeInDDBB, 10000);
+async function readData(dbController: MongoController) {
+  const teams: Team[] = await dbController.readTeams()
+  console.log(teams)
+  await dbController.closeConnection()
+}
 
-// openConnection(links_teams)
+async function setupMongoConnection(): Promise<MongoController>{
+  const dbController = new MongoController()
+  await dbController.openConnection()
+  return dbController
+}
 
-// function storeInDDBB(){
-//   links_teams.map((t: Team) => 
-//     console.log(t.name + " " + ((t.players)?t.players.length:0) ))
-//   openConnection(links_teams)
-// }
+//scrapData(dbController)
+setupMongoConnection().then(conn => {
+  readData(conn)
+})
+
