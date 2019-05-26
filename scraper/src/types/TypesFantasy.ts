@@ -2,22 +2,36 @@ type hasLink = {
     link: string
 }
 
-export interface Team extends hasLink {
-    name: string,
-    players?: Player[]
+type hasId = {
+    id: string
 }
 
-export interface Player extends hasLink {
+export interface Team extends hasLink, hasId {
+    name: string,
+    players_links?: string[]
+}
+
+export interface Player extends hasLink, hasId {
+    teamId: string,
     name: string,
     position: string,
-    value: number,
+    price: number,
+    average: number,
     fixtures?: FixtureData[]
-    historicValues?: Value[]
+    historicPrices?: Price[]
+    historicScore?: FinalScore[]
 }
 
-type Value = {
+type FinalScore = {
+    season: string,
+    points: number,
+    numPlayedGames: number,
+    average: number
+}
+
+type Price = {
     date: Date,
-    value: number
+    price: number
 }
 
 type FixtureData = {
@@ -39,7 +53,7 @@ type GeneralStats = {
 }
 
 type OffensiveStats = {
-    AG: number,
+    AG: number, //Write down in comments the meaning of each one
     ASG: number,
     LLE: number,
     PTYP: number

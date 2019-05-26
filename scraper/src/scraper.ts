@@ -23,8 +23,19 @@ const options_teams = {
     };
   }
 
+ function generate_id(teamName: string): string{
+    let lower = teamName.toLowerCase().split(" ")
+    let newName = lower[lower.length-1]
+    const originalChars = ["á", "é", "í", "ó", "ú"]
+    const replaceChars = ["a", "e", "i", "o", "u"]
+    for(let i = 0; i < originalChars.length; i++){ 
+      newName = newName.split(originalChars[i]).join(replaceChars[i])
+     }
+    return newName
+  }
+
 //Read the list of teams for this season
- export default async function scrap_teams(): Promise<Team[]>{
+ export async function scrap_teams(): Promise<Team[]>{
    const links_teams: Team[] = []
   return new Promise(resolve => {
     rp(options_teams)
@@ -32,7 +43,7 @@ const options_teams = {
         console.log("Started team info scraping");
         var team_links = $(".teams-menu").find('a');
         team_links.each(function(i, link){ 
-          const t :Team = {name: link.attribs.title, link: link.attribs.href, players: []}
+          const t :Team = {id: generate_id(link.attribs.title), name: link.attribs.title, link: link.attribs.href, players_links: []}
           console.log(t)
           links_teams.push(t);
         });
@@ -44,7 +55,7 @@ const options_teams = {
     })
   }
 
-  function scraping_players_links(team: Team){
+  export function scrap_players_links(team: Team): Promise<string[]>{
     return new Promise(resolve => {
         rp(return_url_options(base_url + team.link))
         .then(($) => {
@@ -64,7 +75,7 @@ const options_teams = {
       }
   )}
 
-  function scraping_player_stats(link_player: string, team: Team){
+  /*function scraping_player_stats(link_player: string, team: Team){
     rp(return_url_options(base_url + link_player))
       .then(($) => {
         const name_player = $('.name').text()
@@ -88,4 +99,4 @@ const options_teams = {
       .catch((error) => {
         console.log("Error scraping player stats of " + link_player)
       })
-  }
+  }*/
