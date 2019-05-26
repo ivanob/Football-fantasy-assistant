@@ -1,4 +1,4 @@
-import { Team, Player } from './types/TypesFantasy'
+import { Team, Player, GeneralInfo } from './types/TypesFantasy'
 
 const cheerio = require('cheerio')
 // const rp = require('request-promise')
@@ -75,28 +75,42 @@ const options_teams = {
       }
   )}
 
-  /*function scraping_player_stats(link_player: string, team: Team){
+  function scrap_general_stats($: any): GeneralInfo{
+    let generalStats: GeneralInfo = {position:"", price:-1, average:-1, played_games:-1, totalPoints:-1}
+    $('.info .left .title').each(function(index, element){ 
+      if($(element).text()==="Demarcación"){
+        generalStats.position = ($(element).next().text().trim())
+      }
+      if($(element).text()==="Valor"){
+        generalStats.price = ($(element).next().text()).slice(0, -2)
+      }
+    })
+    $('.info .right .title').each(function(index, element){ 
+      if($(element).text()==="Partidos"){
+        generalStats.played_games = ($(element).next().text())
+      }
+      if($(element).text()==="Media"){
+        generalStats.average = ($(element).next().text())
+      }
+    })
+    generalStats.totalPoints = $('.photo .points').text().replace("puntos", "")
+    return generalStats
+  }
+
+  export function scrap_player_stats(link_player: string, team: Team): Promise<Player>{
+    return new Promise(resolve => {
     rp(return_url_options(base_url + link_player))
       .then(($) => {
         const name_player = $('.name').text()
-        let position = ""
-        let value = 0
-        $('.info .left .title').each(function(index, element){ 
-          if($(element).text()==="Demarcación"){
-            position = ($(element).next().text().trim())
-          }
-          if($(element).text()==="Valor"){
-            value = ($(element).next().text()).slice(0, -2)
-          }
-        })
-        const p: Player =  {name: name_player,
-          position: position,
-          value: value,
+        const p: Player =  {
+          id: generate_id(name_player),
+          teamId: team.id,
+          name: name_player,
+          generalInfo: scrap_general_stats($),
           link: base_url + link_player}
-          if(!team.players) team.players = []
-        team.players = team.players.concat(p)
+        resolve(p)
       })
       .catch((error) => {
         console.log("Error scraping player stats of " + link_player)
       })
-  }*/
+  })}

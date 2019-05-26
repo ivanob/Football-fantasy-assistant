@@ -8,18 +8,24 @@ type hasId = {
 
 export interface Team extends hasLink, hasId {
     name: string,
-    players_links?: string[]
+    players_links: string[]
 }
 
 export interface Player extends hasLink, hasId {
     teamId: string,
     name: string,
+    generalInfo: GeneralInfo,
+    fixtures?: FixtureData[]
+    historicalPrices?: Price[]
+    historicalScore?: FinalScore[]
+}
+
+export type GeneralInfo = {
     position: string,
     price: number,
     average: number,
-    fixtures?: FixtureData[]
-    historicPrices?: Price[]
-    historicScore?: FinalScore[]
+    played_games: number,
+    totalPoints: number
 }
 
 type FinalScore = {
