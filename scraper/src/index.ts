@@ -1,6 +1,7 @@
 import { Team, Player } from './types/TypesFantasy'
-import { scrap_teams, scrap_players_links, scrap_player_stats } from './scraper'
+import { scrap_teams, scrap_players_links, scrap_player_stats, contains_wrong_data_player } from './scraper'
 import { MongoController } from './data/MongoController'
+import { read } from 'fs';
 
 async function scrapDataTeams(dbController: MongoController, storeData: boolean) {
   let teams: Team[] = await scrap_teams()
@@ -17,17 +18,23 @@ async function scrapDataTeams(dbController: MongoController, storeData: boolean)
 
 async function scrapDataPlayers(dbController: MongoController, storeData: boolean) {
   let teams: Team[] = await dbController.readTeams()
-  const a = await scrap_player_stats(teams[0].players_links[0], teams[0])
-  console.log(a)
-  if(storeData){
-    dbController.storeTeams(teams)
+  for(let team of teams){
+    console.log('Scrapping players of ' + team.id)
+    for(let t of team.players_links){
+      const p = await scrap_player_stats(t, team)
+      console.log('Scrapping player ' + p.id)
+      const containsWrongData: Boolean = contains_wrong_data_player(p)
+      const playerInDB = await dbController.readPlayer(p.id)
+      if(storeData && !containsWrongData && playerInDB===null){
+        dbController.storePlayer(p)
+      }
+    }
   }
   dbController.closeConnection()
 }
 
 async function readData(dbController: MongoController) {
   const teams: Team[] = await dbController.readTeams()
-  
   await dbController.closeConnection()
 }
 
@@ -41,6 +48,6 @@ async function setupMongoConnection(): Promise<MongoController>{
 setupMongoConnection().then(conn => {
   //readData(conn)
   //scrapDataTeams(conn, false)
-  scrapDataPlayers(conn, false)
+  scrapDataPlayers(conn, true)
 })
 

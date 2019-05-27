@@ -1,4 +1,4 @@
-import {Team} from '../types/TypesFantasy'
+import {Team, Player} from '../types/TypesFantasy'
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
@@ -52,4 +52,13 @@ export class MongoController {
             })
         }
     )}
+
+    readPlayer(idPlayer: string): Player{
+        return this.db.collection("players").findOne( { id: idPlayer }) 
+    }
+
+    storePlayer(player: Player){
+        this.db.collection('players').insertOne(player)
+        console.log('Player: ' + player.id + ' stored in DB')
+    }
 }

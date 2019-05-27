@@ -15,7 +15,7 @@ export interface Player extends hasLink, hasId {
     teamId: string,
     name: string,
     generalInfo: GeneralInfo,
-    fixtures?: FixtureData[]
+    fixtures: FixtureData[]
     historicalPrices?: Price[]
     historicalScore?: FinalScore[]
 }
@@ -40,39 +40,38 @@ type Price = {
     price: number
 }
 
-type FixtureData = {
-    team: Team,
+export type FixtureData = {
     number: number,
-    rival: Team,
-    generalStats: GeneralStats[],
-    offensiveStats: OffensiveStats[],
-    deffensiveStats: DeffensiveStats[],
-    negativeStats: NegativeStats[],
-    bonusStats: BonusStats[]
+    rival?: Team,
+    generalStats: GeneralStats,
+    offensiveStats: OffensiveStats,
+    deffensiveStats: DeffensiveStats,
+    negativeStats: NegativeStats,
+    bonusStats: BonusStats
     totalPoints: number
 }
 
-type GeneralStats = {
-    PJ: boolean,
-    Plus60: boolean,
+export type GeneralStats = {
+    PJ: number,
+    Plus60: number,
     G: number
 }
 
-type OffensiveStats = {
+export type OffensiveStats = {
     AG: number, //Write down in comments the meaning of each one
     ASG: number,
     LLE: number,
     PTYP: number
 }
 
-type DeffensiveStats = {
+export type DeffensiveStats = {
     P0: number,
     PTYD: number,
     P: number,
     D: number
 }
 
-type NegativeStats = {
+export type NegativeStats = {
     PTYF: number,
     GPP: number,
     GE: number,
@@ -80,7 +79,7 @@ type NegativeStats = {
     TR: number
 }
 
-type BonusStats = {
+export type BonusStats = {
     RM: number,
     RG: number,
     REC: number,
