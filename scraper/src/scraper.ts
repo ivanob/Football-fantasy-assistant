@@ -1,5 +1,5 @@
 import { Team, Player, GeneralInfo, FixtureData} from './types/TypesFantasy'
-import { OffensiveStats, DeffensiveStats, NegativeStats, BonusStats } from './types/TypesFantasy'
+import { OffensiveStats, DeffensiveStats, NegativeStats, BonusStats,FinalScore, Price } from './types/TypesFantasy'
 
 const cheerio = require('cheerio')
 // const rp = require('request-promise')
@@ -33,6 +33,10 @@ const options_teams = {
       newName = newName.split(originalChars[i]).join(replaceChars[i])
      }
     return newName
+  }
+
+  function clean_non_printable_chars(str: string): string{
+    return str.replace(/[^\x20-\x7E]/g, '').split(' ').join('')
   }
 
   function generate_id_player(playerName: string): string{
@@ -73,7 +77,7 @@ const options_teams = {
           console.log("Scraping players links from team " + team.name);
           var players_link: string[] = [];
           $(".tablepager tr h3 a").each(function(link){ 
-            var link_player: string = $(this).attr("href");
+            var link_player: string = $(this).attr("href")
             if(players_link.filter(x => x===link_player).length === 0){
                 players_link.push(link_player)
             }
@@ -184,6 +188,44 @@ const options_teams = {
       return fixtures
     }
 
+    function scrap_historical_prices($: any): Price[]{
+      let totalPrices: Price[] = []
+      $('#market-daily-value-Player canvas').each(function(i, element){ 
+        const dates = $(element).attr('data-labels').split(',')
+        const prices = $(element).attr('data-scaledvalues').split(',')
+        for(let i=0; i<dates.length; i++){
+          totalPrices.push({num: i, date:dates[i].split('\'').join(''), price: prices[i]})
+        }
+      })
+      return totalPrices
+    }
+
+  function scrap_historical_score($: any): FinalScore[]{
+    let historicalScores:FinalScore[] = []
+    $('#player-history .data-body .data-row').each(function(i, element){ 
+      let score : FinalScore= {season: "",
+        points: 0,
+        numPlayedGames: 0,
+        average: 0}
+      $(element).find('div').each(function(j, entry){
+        if(j === 0){
+          score.season = clean_non_printable_chars($(entry).text())
+        }
+        if(j === 1){
+          score.average = parseFloat(clean_non_printable_chars($(entry).text().replace(',','.')))
+        }
+        if(j === 2){
+          score.numPlayedGames = parseInt(clean_non_printable_chars($(entry).text()))
+        }
+        if(j === 3){
+          score.points = parseInt(clean_non_printable_chars($(entry).text()))
+        }
+      })
+      historicalScores.push(score)
+    })
+    return historicalScores
+  }
+
   export function scrap_player_stats(link_player: string, team: Team): Promise<Player>{
     return new Promise(resolve => {
     rp(return_url_options(base_url + link_player))
@@ -195,7 +237,10 @@ const options_teams = {
           name: name_player,
           generalInfo: scrap_general_stats($),
           fixtures: scrap_fixtures_stats($),
-          link: base_url + link_player}
+          link: base_url + link_player,
+          historicalScore: scrap_historical_score($),
+          historicalPrices: scrap_historical_prices($)
+        }
         resolve(p)
       })
       .catch((error) => {

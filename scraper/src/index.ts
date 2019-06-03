@@ -23,10 +23,13 @@ async function scrapDataPlayers(dbController: MongoController, storeData: boolea
     for(let t of team.players_links){
       const p = await scrap_player_stats(t, team)
       console.log('Scrapping player ' + p.id)
-      const containsWrongData: Boolean = contains_wrong_data_player(p)
-      const playerInDB = await dbController.readPlayer(p.id)
-      if(storeData && !containsWrongData && playerInDB===null){
-        dbController.storePlayer(p)
+      if(storeData){
+        const containsWrongData: Boolean = contains_wrong_data_player(p)
+        const playerInDB = await dbController.readPlayer(p.id)
+        if((containsWrongData && playerInDB!==null) || playerInDB===null){
+          console.log('Overwritting ' + p.id + ' data cause INCORRECT DATA')
+          dbController.storePlayer(p)
+        }
       }
     }
   }

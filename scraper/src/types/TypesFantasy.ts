@@ -28,15 +28,16 @@ export type GeneralInfo = {
     totalPoints: number
 }
 
-type FinalScore = {
+export type FinalScore = {
     season: string,
     points: number,
     numPlayedGames: number,
     average: number
 }
 
-type Price = {
-    date: Date,
+export type Price = {
+    num: number,
+    date: string,
     price: number
 }
 

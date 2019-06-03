@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
 export class MongoController {
-    url: String = 'mongodb://localhost:27018' // Connection URL
+    url: String = 'mongodb://localhost:27022' // Connection URL
     dbName: String = 'fantasy' // Database Name
     db: any
     client: any
