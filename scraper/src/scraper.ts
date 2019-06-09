@@ -1,5 +1,8 @@
 import { Team, Player, GeneralInfo, FixtureData} from './types/TypesFantasy'
-import { OffensiveStats, DeffensiveStats, NegativeStats, BonusStats,FinalScore, Price } from './types/TypesFantasy'
+import { OffensiveStats, DeffensiveStats, NegativeStats } from './types/TypesFantasy'
+import { BonusStats,FinalScore, Price, InjuriesSeason } from './types/TypesFantasy'
+import { StatusInjury, rawInjury } from './types/TypesFantasy'
+import { resolve } from 'url';
 
 const cheerio = require('cheerio')
 // const rp = require('request-promise')
@@ -224,6 +227,48 @@ const options_teams = {
       historicalScores.push(score)
     })
     return historicalScores
+  }
+
+  function getInjurySymbol(sym: string, isSanction: boolean): StatusInjury {
+    if(sym === '+'){
+      return StatusInjury.INJURY
+    }else if(sym === '?'){
+      return StatusInjury.DOUBT
+    }else if(isSanction){
+      return StatusInjury.SANCTION
+    }else{
+      return StatusInjury.UNKNOWN
+    }
+  }
+
+  function scrap_injury_fixture(fixture: number): Promise<rawInjury[]> {
+    return new Promise(resolve => 
+      rp(return_url_options(`${base_url}/bajas?Season=2018&Round=${fixture}&Mode=`))
+      .then(($) => {
+        let rawInjSeason: rawInjury[] = [] 
+        $('#absences-by-round .grid-item').each(function(i, element){ //Iteration per team
+            const team_link = $(element).find('.panel-heading h2 a').attr("href")
+            $(element).find('.panel-body .player').each(function(j, elem2){ //Iteration per player
+              const player_link = $(elem2).find('.name a').attr("href")
+              const status = $(elem2).find('.status').text()
+              const sanction = $(elem2).find('div .sanction-red').length
+              //console.log(`In fixture ${fixture} the player ${player_link} from ${team_link} didnt play. status=${status}`)
+              const inj: rawInjury = {fixture:fixture, player_link: player_link,
+                team_link: team_link, status: getInjurySymbol(status, sanction)}
+              rawInjSeason.push(inj)
+            })
+        })
+        resolve(rawInjSeason)
+      }))
+  }
+
+  export async function scrap_injuries(): Promise<rawInjury[]>{
+      let injuriesSeason: rawInjury[] = []
+      for(let fixture = 1; fixture<=38; fixture++){
+        const fixtureInj = await scrap_injury_fixture(fixture)
+        injuriesSeason = injuriesSeason.concat(fixtureInj)
+      }
+      return injuriesSeason
   }
 
   export function scrap_player_stats(link_player: string, team: Team): Promise<Player>{

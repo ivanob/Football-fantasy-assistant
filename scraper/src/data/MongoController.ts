@@ -1,4 +1,4 @@
-import {Team, Player} from '../types/TypesFantasy'
+import {Team, Player, rawInjury} from '../types/TypesFantasy'
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
@@ -60,5 +60,10 @@ export class MongoController {
     storePlayer(player: Player){
         this.db.collection('players').insertOne(player)
         console.log('Player: ' + player.id + ' stored in DB')
+    }
+
+    storeInjuries(injuriesSeason: rawInjury[]){
+        this.db.collection('injuries').insertMany(injuriesSeason)
+        console.log('List of injuries stored in DB')
     }
 }

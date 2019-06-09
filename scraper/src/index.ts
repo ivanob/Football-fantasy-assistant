@@ -1,5 +1,5 @@
 import { Team, Player } from './types/TypesFantasy'
-import { scrap_teams, scrap_players_links, scrap_player_stats, contains_wrong_data_player } from './scraper'
+import { scrap_teams, scrap_players_links, scrap_player_stats, contains_wrong_data_player, scrap_injuries } from './scraper'
 import { MongoController } from './data/MongoController'
 import { read } from 'fs';
 
@@ -47,10 +47,19 @@ async function setupMongoConnection(): Promise<MongoController>{
   return dbController
 }
 
+async function scrapDataInjuries(dbController: MongoController, storeData: boolean){
+  const injuriesSeason = await scrap_injuries()
+  if(storeData){
+    dbController.storeInjuries(injuriesSeason)
+  }
+  dbController.closeConnection()
+}
+
 //Entry point of the program
 setupMongoConnection().then(conn => {
   //readData(conn)
   //scrapDataTeams(conn, false)
-  scrapDataPlayers(conn, true)
+  //scrapDataPlayers(conn, true)
+  scrapDataInjuries(conn, false)
 })
 

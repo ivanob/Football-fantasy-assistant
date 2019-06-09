@@ -35,11 +35,43 @@ export type FinalScore = {
     average: number
 }
 
+// Injury types
+
+export type rawInjury = {
+    fixture: number,
+    player_link: string,
+    team_link: string,
+    status: StatusInjury
+}
+
+export type InjuriesSeason = {
+    season: string,
+    injuries: InjuriesFixture[]
+}
+
+export enum StatusInjury {
+    DOUBT = "?",
+    INJURY = "+",
+    SANCTION = "S",
+    UNKNOWN = "U"
+}
+
+export type InjuriesFixture = {
+    fixtureNumber: number,
+    injuries: string[],
+    sanctions: string[],
+    doubt: string[]
+}
+
+// Prices
+
 export type Price = {
     num: number,
     date: string,
     price: number
 }
+
+// Technical stats
 
 export type FixtureData = {
     number: number,
