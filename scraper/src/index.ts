@@ -27,8 +27,12 @@ async function scrapDataPlayers(dbController: MongoController, storeData: boolea
         const containsWrongData: Boolean = contains_wrong_data_player(p)
         const playerInDB = await dbController.readPlayer(p.id)
         if((containsWrongData && playerInDB!==null) || playerInDB===null){
-          console.log('Overwritting ' + p.id + ' data cause INCORRECT DATA')
+          if((containsWrongData && playerInDB!==null)){
+            console.log(`Overwritting ${p.id} data cause INCORRECT DATA`)
+          }
           dbController.storePlayer(p)
+        }else{
+          console.log(`Player ${p.id} already exists in DDBB`)
         }
       }
     }
@@ -36,9 +40,11 @@ async function scrapDataPlayers(dbController: MongoController, storeData: boolea
   dbController.closeConnection()
 }
 
-async function readData(dbController: MongoController) {
+async function readData(dbController: MongoController, closeConnection: boolean) {
   const teams: Team[] = await dbController.readTeams()
-  await dbController.closeConnection()
+  if(closeConnection){
+    await dbController.closeConnection()
+  }
 }
 
 async function setupMongoConnection(): Promise<MongoController>{
@@ -57,9 +63,9 @@ async function scrapDataInjuries(dbController: MongoController, storeData: boole
 
 //Entry point of the program
 setupMongoConnection().then(conn => {
-  //readData(conn)
-  //scrapDataTeams(conn, false)
+  readData(conn, false)
+  //scrapDataTeams(conn, true)
   //scrapDataPlayers(conn, true)
-  scrapDataInjuries(conn, false)
+  scrapDataInjuries(conn, true)
 })
 

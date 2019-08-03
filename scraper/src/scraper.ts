@@ -265,6 +265,7 @@ const options_teams = {
   export async function scrap_injuries(): Promise<rawInjury[]>{
       let injuriesSeason: rawInjury[] = []
       for(let fixture = 1; fixture<=38; fixture++){
+        console.log(`scrapping injuries from fixture ${fixture}`)
         const fixtureInj = await scrap_injury_fixture(fixture)
         injuriesSeason = injuriesSeason.concat(fixtureInj)
       }
