@@ -2,8 +2,12 @@ import express = require('express')
 import graphqlHTTP = require('express-graphql')
 import schema = require('../schema/schema')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const app = express()
+
+// allow cross-origin requests
+app.use(cors())
 
 //connect to mongo DB
 mongoose.connect('mongodb://localhost:27022/fantasy')
