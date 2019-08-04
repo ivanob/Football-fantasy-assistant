@@ -14,6 +14,18 @@ const PlayerType = new GraphQLObjectType({
         name: {type: GraphQLString},
         link: {type: GraphQLString},
         teamId: {type: GraphQLString},
+        generalInfo: {
+            type: new GraphQLObjectType({
+                name: 'generalInfo',
+                fields: () => ({
+                    position: {type: GraphQLString},
+                    price: {type: GraphQLString},
+                    average: {type: GraphQLString},
+                    played_games: {type: GraphQLString},
+                    totalPoints: {type: GraphQLString}
+                })
+            })
+        },
         injuries: {
             type: new GraphQLList(InjuryType),
             resolve(parent, args){
