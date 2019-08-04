@@ -3,7 +3,9 @@ const Schema = mongoose.Schema
 
 const playerSchema = new Schema({
     id: String,
-    name: String
+    name: String,
+    link: String,
+    teamId: String
 })
 
-module.exports = mongoose.model('Player', playerSchema) // 'Player' is the name of the collection in Mongo
+module.exports = mongoose.model('Player', playerSchema) 
