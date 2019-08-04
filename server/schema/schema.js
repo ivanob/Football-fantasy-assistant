@@ -17,12 +17,64 @@ const subtypeGeneralInfo = new GraphQLObjectType({
     })
 })
 
+const subtypeGeneralStats = new GraphQLObjectType({
+    name: 'generalStats',
+    fields: () => ({
+        PJ: {type: GraphQLString},
+        Plus60: {type: GraphQLString},
+        G: {type: GraphQLString}
+    })
+})
+const subtypeOffensiveStats = new GraphQLObjectType({
+    name: 'offensiveStats',
+    fields: () => ({
+        AG: {type: GraphQLString},
+        ASG: {type: GraphQLString},
+        LLE: {type: GraphQLString},
+        PTYP: {type: GraphQLString}
+    })
+})
+const subtypeDeffensiveStats = new GraphQLObjectType({
+    name: 'deffensiveStats',
+    fields: () => ({
+        P0: {type: GraphQLString},
+        PTYD: {type: GraphQLString},
+        P: {type: GraphQLString},
+        D: {type: GraphQLString}
+    })
+})
+const subtypeNegativeStats = new GraphQLObjectType({
+    name: 'negativeStats',
+    fields: () => ({
+        PTYF: {type: GraphQLString},
+        GPP: {type: GraphQLString},
+        GE: {type: GraphQLString},
+        TA: {type: GraphQLString},
+        TR: {type: GraphQLString}
+    })
+})
+const subtypeBonusStats = new GraphQLObjectType({
+    name: 'bonusStats',
+    fields: () => ({
+        RM: {type: GraphQLString},
+        RG: {type: GraphQLString},
+        REC: {type: GraphQLString},
+        PER: {type: GraphQLString},
+        MAR: {type: GraphQLString}
+    })
+})
+
 const subtypeFixtures = new GraphQLList(
     new GraphQLObjectType({
     name: 'fixtures',
     fields: () => ({
         number: {type: GraphQLInt},
-        rival: {type: GraphQLString}
+        rival: {type: GraphQLString},
+        generalStats: {type: subtypeGeneralStats},
+        offensiveStats: {type: subtypeOffensiveStats},
+        deffensiveStats: {type: subtypeDeffensiveStats},
+        negativeStats: {type: subtypeNegativeStats},
+        negativeStats: {type: subtypeNegativeStats}
     })
 }))
 
