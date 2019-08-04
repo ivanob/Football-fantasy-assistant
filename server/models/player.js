@@ -9,12 +9,18 @@ const generalInfo = {
     totalPoints: String
 }
 
+const fixtures = {
+    number: String,
+    rival: String
+}
+
 const playerSchema = new Schema({
     id: String,
     name: String,
     link: String,
     teamId: String,
-    generalInfo
+    generalInfo,
+    fixtures: [fixtures]
 })
 
 module.exports = mongoose.model('Player', playerSchema) 

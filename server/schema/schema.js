@@ -6,6 +6,25 @@ const PlayerMongo = require('../models/player')
 const InjuryMongo = require('../models/injury')
 const TeamMongo = require('../models/team')
 
+const subtypeGeneralInfo = new GraphQLObjectType({
+    name: 'generalInfo',
+    fields: () => ({
+        position: {type: GraphQLString},
+        price: {type: GraphQLString},
+        average: {type: GraphQLString},
+        played_games: {type: GraphQLString},
+        totalPoints: {type: GraphQLString}
+    })
+})
+
+const subtypeFixtures = new GraphQLList(
+    new GraphQLObjectType({
+    name: 'fixtures',
+    fields: () => ({
+        number: {type: GraphQLInt},
+        rival: {type: GraphQLString}
+    })
+}))
 
 const PlayerType = new GraphQLObjectType({
     name: 'Player',
@@ -15,16 +34,10 @@ const PlayerType = new GraphQLObjectType({
         link: {type: GraphQLString},
         teamId: {type: GraphQLString},
         generalInfo: {
-            type: new GraphQLObjectType({
-                name: 'generalInfo',
-                fields: () => ({
-                    position: {type: GraphQLString},
-                    price: {type: GraphQLString},
-                    average: {type: GraphQLString},
-                    played_games: {type: GraphQLString},
-                    totalPoints: {type: GraphQLString}
-                })
-            })
+            type: subtypeGeneralInfo
+        },
+        fixtures: {
+            type: subtypeFixtures
         },
         injuries: {
             type: new GraphQLList(InjuryType),
