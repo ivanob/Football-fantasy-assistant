@@ -12,7 +12,6 @@ const getPlayerQuery = gql`
 
 
 class Player extends Component {
-    
   render() {
     console.log(this.props)
     return (

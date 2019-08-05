@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ApolloClient from 'apollo-boost'
 import {ApolloProvider} from 'react-apollo'
-import Player from './components/Player'
+import MainContainer from './containers/MainContainer'
 
 
 //apollo-client setup
@@ -16,8 +16,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div className="App">
-        <h1>List of players</h1>
-        <Player></Player>
+          <MainContainer/>
         </div>
       </ApolloProvider>
     );
