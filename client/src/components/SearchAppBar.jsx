@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,6 +7,8 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,41 +61,64 @@ const useStyles = makeStyles(theme => ({
       },
     },
   },
+  add: {
+    marginLeft: '10px'
+  }
 }));
 
-export default function SearchAppBar() {
-  const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Fantasy football asistant
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+/*function func(event){
+  this.setState({ playerName: event.target.value })
+}*/
+
+function SearchAppBar(){
+    const [playerName, setPlayerName] = useState('');
+    const classes = useStyles();
+    useEffect(() => {
+      // Stuff you'd normally execute using ComponentDidMount here
+    }, []);
+  
+    // this.setState({playerName:''})
+  
+  
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="open drawer"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography className={classes.title} variant="h6" noWrap>
+              Fantasy football asistant
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(event) => {setPlayerName(event.target.value)}}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+            <div className={classes.add}>
+              <Fab color="primary" aria-label="add" className={classes.fab} size="small" onClick={()=>console.log(playerName)}>
+                <AddIcon />
+              </Fab>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+  )
 }
+
+export default SearchAppBar
