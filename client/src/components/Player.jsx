@@ -1,23 +1,41 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {gql} from 'apollo-boost'
 import {graphql} from 'react-apollo'
+import { Query } from "react-apollo";
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 const getPlayerQuery = gql`
 {
-    players {
+    player(id: "pacheco") {
         name
     }
 }
 `
+/*
+<TableRow key={1}>
+          <TableCell component="th" scope="row">
+            {player? player.playerId: ''}
+          </TableCell>
+          <TableCell align="right">{''}</TableCell>
+          <TableCell align="right">{''}</TableCell>
+          <TableCell align="right">{''}</TableCell>
+        </TableRow>*/
 
-
-class Player extends Component {
-  render() {
-    console.log(this.props)
+function Player({player}){
     return (
-      <p>player</p>
+      <Query query={getPlayerQuery} variables= {{playerId: 'pacheco'}}>
+        {({ loading, error, data }) => {
+        if (loading) return <p>Loading...</p>;
+        if (error) return <p>Error :(</p>;
+
+        return data.player.name
+    }}
+      
+      </Query>
     )
-  }
 }
 
-export default graphql(getPlayerQuery)(Player)
+//export default graphql(getPlayerQuery)(Player)
+export default (Player)
+

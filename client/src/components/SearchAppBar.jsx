@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   this.setState({ playerName: event.target.value })
 }*/
 
-function SearchAppBar(){
+function SearchAppBar({onSearchPlayer}){
     const [playerName, setPlayerName] = useState('');
     const classes = useStyles();
     useEffect(() => {
@@ -111,7 +111,7 @@ function SearchAppBar(){
               />
             </div>
             <div className={classes.add}>
-              <Fab color="primary" aria-label="add" className={classes.fab} size="small" onClick={()=>console.log(playerName)}>
+              <Fab color="primary" aria-label="add" className={classes.fab} size="small" onClick={()=>onSearchPlayer(playerName)}>
                 <AddIcon />
               </Fab>
             </div>
