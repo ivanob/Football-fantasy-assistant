@@ -74,7 +74,8 @@ const subtypeFixtures = new GraphQLList(
         offensiveStats: {type: subtypeOffensiveStats},
         deffensiveStats: {type: subtypeDeffensiveStats},
         negativeStats: {type: subtypeNegativeStats},
-        negativeStats: {type: subtypeNegativeStats}
+        bonusStats: {type: subtypeBonusStats},
+        totalPoints: {type: GraphQLString}
     })
 }))
 
