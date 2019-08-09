@@ -31,14 +31,15 @@ export default function PlayersTable({ players }) {
   const classes = useStyles();
 
    return(
-        <Paper className={classes.root}>
+       <Paper className={classes.root}>
        <Table className={classes.table}>
         <TableHead>
         <TableRow>
             <TableCell>Name player</TableCell>
-            <TableCell align="right">Team</TableCell>
-            <TableCell align="right">Points 2018</TableCell>
-            <TableCell align="right">Titularity %</TableCell>
+            <TableCell align="right">Complete titularity</TableCell>
+            <TableCell align="right">Partial titularity</TableCell>
+            <TableCell align="right">% Injury</TableCell>
+            <TableCell align="right">Avg points played</TableCell>
         </TableRow>
         </TableHead>
         <TableBody>
