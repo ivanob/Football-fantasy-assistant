@@ -10,13 +10,14 @@ export const calculateStats = (data) => {
     const countTotalPoints = data.generalInfo.totalPoints
     const arrayFixturesPlayed = gamesPlayed.map(g => g.number)
     const injuriedWeeks = data.injuries.filter(inj => !arrayFixturesPlayed.includes(inj.fixture) )
-    calculatePersonalPoints(data)
     return {
         name: data.name,
         completeTitularity: calculateTitularity(gamesCompletePlayed,injuriedWeeks,numFixturesAvailable),
         partialTitularity: calculateTitularity(gamesPartialPlayed,injuriedWeeks,numFixturesAvailable),
         percInjury: calculatePercInjury(injuriedWeeks, numFixturesAvailable),
-        avgPointsPlayed: calculateAveragePlayedGames(countTotalPoints, gamesPlayed) 
+        avgPointsPlayed: calculateAveragePlayedGames(countTotalPoints, gamesPlayed),
+        personalStats: calculatePersonalPoints(data),
+        totalPoints: data.generalInfo.totalPoints
     }
 }
 
@@ -36,6 +37,14 @@ const calculateAveragePlayedGames = (totalPoints, gamesCompletePlayed) => {
 const calculatePersonalPoints = (player) => {
     switch(player.generalInfo.position){
         case 'Portero':
-            return player
+            return player.fixtures.reduce((acc, fix) => 
+                { return acc + parseInt(fix.deffensiveStats.P0) +
+                parseInt(fix.deffensiveStats.PTYD)+
+                parseInt(fix.deffensiveStats.P)+
+                parseInt(fix.deffensiveStats.D)+
+                parseInt(fix.bonusStats.PER)+
+                parseInt(fix.bonusStats.REC)+
+                parseInt(fix.negativeStats.GE)
+            }, 0)
     }
 }

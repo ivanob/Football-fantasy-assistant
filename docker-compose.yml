@@ -1,22 +1,22 @@
 version: '3.5'
 
 services:
-  frontend:
-    container_name: client-fantasy
-    build:
-      context: .
-      dockerfile: ./client/Dockerfile
-    volumes:
-      - '.:/usr/src/app'
-      - '/usr/src/app/node_modules'
-    ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=development
+  # frontend:
+  #   container_name: client-fantasy
+  #   build:
+  #     context: .
+  #     dockerfile: ./client/Dockerfile
+  #   volumes:
+  #     - '.:/usr/src/app'
+  #     - '/usr/src/app/node_modules'
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - NODE_ENV=development
   mongo:
     container_name: mongo
     image: mongo
     volumes:
-      - ./data:/data/db
+      - ./data2:/data/db
     ports:
       - "27022:27017"

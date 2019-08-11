@@ -11,11 +11,14 @@ query($playerId: ID!){
             Plus60
           },
           deffensiveStats{
-            P,D
+            P,D,P0,PTYD
           },
           bonusStats{
-            REC,MAR
+            REC,MAR,PER
           },
+          negativeStats{
+            GE
+          }
         },
         generalInfo{
           totalPoints,

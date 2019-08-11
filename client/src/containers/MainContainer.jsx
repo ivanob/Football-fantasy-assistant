@@ -3,8 +3,6 @@ import Grid from '@material-ui/core/Grid'
 import SearchAppBar from '../components/SearchAppBar'
 import PlayersTable from '../components/PlayersTable'
 
-
-
 function MainContainer() {
   const [playerName, setPlayerName] = useState('')
 

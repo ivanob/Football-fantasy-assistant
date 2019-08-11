@@ -22,11 +22,12 @@ const useStyles = makeStyles(theme => ({
   }));
 
   const printBody = (playerId) => {
+    console.log('print data of ' + playerId)
     return <Player playerId={playerId} />
   }
 
 export default function PlayersTable({ playerId }) {
-  const classes = useStyles();
+  const classes = useStyles()
 
    return(
        <Paper className={classes.root}>
@@ -38,6 +39,8 @@ export default function PlayersTable({ playerId }) {
             <TableCell align="right">Partial titularity</TableCell>
             <TableCell align="right">% Injury</TableCell>
             <TableCell align="right">Avg points played</TableCell>
+            <TableCell align="right">Personal points</TableCell>
+            <TableCell align="right">Total points</TableCell>
         </TableRow>
         </TableHead>
         <TableBody>
