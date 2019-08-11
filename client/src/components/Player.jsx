@@ -7,39 +7,33 @@ import {calculateStats} from '../utils/statistics'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-
-/*
-<TableRow key={1}>
-          <TableCell component="th" scope="row">
-            {player? player.playerId: ''}
-          </TableCell>
-          <TableCell align="right">{''}</TableCell>
-          <TableCell align="right">{''}</TableCell>
-          <TableCell align="right">{''}</TableCell>
-        </TableRow>*/
-
 class Player extends Component{
+
       render(){
         if (this.props.loading) return <p>Loading...</p>
         if (this.props.error) return <p>Error :(</p>
-          console.log(this.props.data)
-          return ''
-          
-        /*const stats = calculateStats(data.player)
-        console.log(stats, player)
-        return <TableRow key={stats.name}>
-            <TableCell component="th" scope="row">
-              {stats.name}
-            </TableCell>
-            <TableCell align="right">{stats.completeTitularity}</TableCell>
-            <TableCell align="right">{stats.partialTitularity}</TableCell>
-            <TableCell align="right">{stats.percInjury}</TableCell>
-            <TableCell align="right">{stats.avgPointsPlayed}</TableCell>
-          </TableRow>
-          
-        */
+          if(this.props.data.player){
+            const stats = calculateStats(this.props.data.player)
+            return <TableRow key={stats.name}>
+              <TableCell component="th" scope="row">
+                {stats.name}
+              </TableCell>
+              <TableCell align="right">{stats.completeTitularity}</TableCell>
+              <TableCell align="right">{stats.partialTitularity}</TableCell>
+              <TableCell align="right">{stats.percInjury}</TableCell>
+              <TableCell align="right">{stats.avgPointsPlayed}</TableCell>
+            </TableRow>
+          }else return ''
         }
 }
 
-export default graphql(getPlayerQuery)(Player)
+export default graphql(getPlayerQuery, {
+  options: (props)=>{
+    return{
+      variables:{
+        playerId: props.playerId
+      }
+    }
+  }
+})(Player)
 

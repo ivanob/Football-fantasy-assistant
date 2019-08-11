@@ -16,7 +16,7 @@ function MainContainer() {
             <SearchAppBar onSearchPlayer={onSearchPlayer}/>
         <Grid item xs={12}>
         </Grid>
-            <PlayersTable players={[{playerId: playerName}]}/>
+            <PlayersTable playerId={playerName}/>
         </Grid>
     )
 }

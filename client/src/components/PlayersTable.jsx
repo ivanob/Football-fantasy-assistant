@@ -21,13 +21,11 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-  const printBody = (players) => {
-    return (players.map(p => (
-        <Player player={p} />
-    )))
+  const printBody = (playerId) => {
+    return <Player playerId={playerId} />
   }
 
-export default function PlayersTable({ players }) {
+export default function PlayersTable({ playerId }) {
   const classes = useStyles();
 
    return(
@@ -43,7 +41,7 @@ export default function PlayersTable({ players }) {
         </TableRow>
         </TableHead>
         <TableBody>
-            {printBody(players)}
+            {printBody(playerId)}
         </TableBody>
         </Table>
         </Paper>

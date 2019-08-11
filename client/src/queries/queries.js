@@ -1,8 +1,8 @@
 import {gql} from 'apollo-boost'
 
 const getPlayerQuery = gql`
-{
-    player(id: "melero") {
+query($playerId: ID!){
+    player(id: $playerId) {
         name,
         fixtures{
           number,
