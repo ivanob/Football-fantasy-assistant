@@ -1,46 +1,13 @@
-import React from 'react'
-import {gql} from 'apollo-boost'
+import React, { Component } from 'react'
+
 import {graphql} from 'react-apollo'
+import {getPlayerQuery} from '../queries/queries'
 import { Query } from "react-apollo";
 import {calculateStats} from '../utils/statistics'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-const getPlayerQuery = gql`
-{
-    player(id: "pacheco") {
-        name,
-        fixtures{
-          number,
-          generalStats{
-            PJ,
-            Plus60
-          },
-          deffensiveStats{
-            P,D
-          },
-          bonusStats{
-            REC,MAR
-          },
-        },
-        generalInfo{
-          totalPoints,
-          position
-        },
-        injuries{
-          fixture
-        }
-    }
-}
-`
 
-const getAllPlayerQuery = gql`
-{
-    players {
-        name
-    }
-}
-`
 /*
 <TableRow key={1}>
           <TableCell component="th" scope="row">
@@ -51,14 +18,14 @@ const getAllPlayerQuery = gql`
           <TableCell align="right">{''}</TableCell>
         </TableRow>*/
 
-function Player({player}){
-    return (
-      <Query query={getPlayerQuery} variables={{playerId: 'pacheco'}}>
-        {({ loading, error, data }) => {
-        if (loading) return <p>Loading...</p>
-        if (error) return <p>Error :(</p>
-          console.log(data)
-        const stats = calculateStats(data.player)
+class Player extends Component{
+      render(){
+        if (this.props.loading) return <p>Loading...</p>
+        if (this.props.error) return <p>Error :(</p>
+          console.log(this.props.data)
+          return ''
+          
+        /*const stats = calculateStats(data.player)
         console.log(stats, player)
         return <TableRow key={stats.name}>
             <TableCell component="th" scope="row">
@@ -70,11 +37,9 @@ function Player({player}){
             <TableCell align="right">{stats.avgPointsPlayed}</TableCell>
           </TableRow>
           
-        }}
-        </Query>
-    )
+        */
+        }
 }
 
-//export default graphql(getPlayerQuery)(Player)
-export default (Player)
+export default graphql(getPlayerQuery)(Player)
 
