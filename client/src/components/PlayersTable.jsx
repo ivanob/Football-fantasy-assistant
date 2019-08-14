@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,13 +21,22 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-  const printBody = (playerId) => {
+  /*const printBody = (playerId) => {
     console.log('print data of ' + playerId)
     return <Player playerId={playerId} />
-  }
+  }*/
 
 export default function PlayersTable({ playerId }) {
   const classes = useStyles()
+  const [tablePlayers, setTablePlayers] = useState(new Map())
+  if(!tablePlayers.has(playerId)){
+    setTablePlayers(tablePlayers.set(playerId, (<Player playerId={playerId} />)))
+  }
+  useEffect(() => {
+    // Update the document title using the browser API
+        
+        
+    });
 
    return(
        <Paper className={classes.root}>
@@ -44,7 +53,9 @@ export default function PlayersTable({ playerId }) {
         </TableRow>
         </TableHead>
         <TableBody>
-            {printBody(playerId)}
+
+            {(Array.from(tablePlayers.values()))
+            }
         </TableBody>
         </Table>
         </Paper>

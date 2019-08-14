@@ -6,12 +6,11 @@ import {calculateStats} from '../utils/statistics'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-class Player extends Component{
-      render(){
-        if (this.props.loading) return <p>Loading...</p>
-        if (this.props.error) return <p>Error :(</p>
-          if(this.props.data.player){
-            const stats = calculateStats(this.props.data.player)
+function Player(props) {
+        if (props.loading) return <p>Loading...</p>
+        if (props.error) return <p>Error :(</p>
+          if(props.data.player){
+            const stats = calculateStats(props.data.player)
             console.log(stats)
             return <TableRow key={stats.name}>
               <TableCell component="th" scope="row">
@@ -26,7 +25,7 @@ class Player extends Component{
             </TableRow>
           }else return ''
         }
-}
+
 
 export default graphql(getPlayerQuery, {
   options: (props)=>{

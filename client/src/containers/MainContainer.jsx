@@ -6,17 +6,18 @@ import PlayersTable from '../components/PlayersTable'
 function MainContainer() {
   const [playerName, setPlayerName] = useState('')
 
-  const onSearchPlayer = (playerId) => {
+const onSearchPlayer = (playerId) => {
     setPlayerName(playerId)
-    }
-    return (
-        <Grid container spacing={3}>
-            <SearchAppBar onSearchPlayer={onSearchPlayer}/>
-        <Grid item xs={12}>
-        </Grid>
-            <PlayersTable playerId={playerName}/>
-        </Grid>
-    )
+}
+
+return (
+    <Grid container spacing={3}>
+        <SearchAppBar onSearchPlayer={onSearchPlayer}/>
+    <Grid item xs={12}>
+    </Grid>
+        <PlayersTable playerId={playerName}/>
+    </Grid>
+)
 }
 
 export default MainContainer
