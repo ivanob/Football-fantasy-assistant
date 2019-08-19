@@ -140,8 +140,13 @@ const RootQuery = new GraphQLObjectType({
         },
         players: {
             type: new GraphQLList(PlayerType),
+            args:{ position: {type: GraphQLString} },
             resolve(parent, args){
-                return PlayerMongo.find({}) //find ALL players
+                if(args.position){
+                    return PlayerMongo.find({"generalInfo.position": args.position})
+                }else {
+                    return PlayerMongo.find({}) //find ALL players
+                }
             }
         },
         // Endpoints for injuries

@@ -1,23 +1,30 @@
-import React, { useState } from 'react'
-import Grid from '@material-ui/core/Grid'
-import SearchAppBar from '../components/SearchAppBar'
-import PlayersTable from '../components/PlayersTable'
+import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import SearchAppBar from '../components/Header/SearchAppBar';
+import PlayersTable from '../components/PlayersTable';
 
 function MainContainer() {
-  const [playerName, setPlayerName] = useState('')
+  const [playerName, setPlayerName] = useState('');
+  const [searchPosition, setSearchPosition] = useState('');
 
-const onSearchPlayer = (playerId) => {
-    setPlayerName(playerId)
-}
+  const onSearchPlayer = playerId => {
+    setPlayerName(playerId);
+  };
 
-return (
+  const onDisplayPosition = position => {
+    setSearchPosition(position);
+  };
+
+  return (
     <Grid container spacing={3}>
-        <SearchAppBar onSearchPlayer={onSearchPlayer}/>
-    <Grid item xs={12}>
+      <SearchAppBar
+        onSearchPlayer={onSearchPlayer}
+        onDisplayPosition={onDisplayPosition}
+      />
+      <Grid item xs={12} />
+      <PlayersTable playerId={playerName} position={searchPosition} />
     </Grid>
-        <PlayersTable playerId={playerName}/>
-    </Grid>
-)
+  );
 }
 
-export default MainContainer
+export default MainContainer;
